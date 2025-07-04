@@ -22,27 +22,33 @@ jobs:
 
       - name: Deploy to EC2 via SSH
         run: |
-          ssh -o StrictHostKeyChecking=no -i ssh-key.pem ubuntu@13.126.34.179   <<  'EOF'
+          ssh -o StrictHostKeyChecking=no -i ssh-key.pem ubuntu@13.126.34.179 << 'EOF'
             set -e
+
             cd /var/www/html/laravel
 
+            echo "Fixing ownership so git pull works..."
+            sudo chown -R ubuntu:ubuntu .
+
+            echo "Pulling latest code from GitHub..."
             git pull origin main
 
-            # Fix ownership and permissions before running commands
+            echo "Setting correct Laravel permissions..."
             sudo chown -R www-data:www-data .
             sudo chmod -R 775 storage bootstrap/cache
 
+            echo "Installing dependencies..."
             composer install --no-interaction --prefer-dist --optimize-autoloader
 
+            echo "Running database migrations..."
             php artisan migrate --force
+
+            echo "Caching Laravel config/routes/views..."
             php artisan config:cache
             php artisan route:cache
             php artisan view:cache
 
+            echo "Creating storage symlink if not exists..."
             if [ ! -L public/storage ]; then
               php artisan storage:link
             fi
-          EOF
-
-      - name: Clean up SSH key
-        run: rm -f ssh-key.pem
