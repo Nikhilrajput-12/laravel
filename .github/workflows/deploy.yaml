@@ -24,7 +24,7 @@ jobs:
         run: |
           ssh -o StrictHostKeyChecking=no -i ssh-key.pem ubuntu@65.2.4.193 << 'EOF'
             cd /var/www/html/laravel
-            rm -rf vendor
+          
             git pull origin main
             composer install --no-interaction --prefer-dist --optimize-autoloader
             php artisan migrate --force
