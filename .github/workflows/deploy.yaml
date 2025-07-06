@@ -22,17 +22,16 @@ jobs:
 
       - name: Deploy to EC2 via SSH
         run: |
-          ssh -o StrictHostKeyChecking=no -i ssh-key.pem ubuntu@13.126.34.179 << 'EOF'
+          ssh -o StrictHostKeyChecking=no -i ssh-key.pem ubuntu@ 65.0.199.68  << 'EOF'
             set -e
 
-            cd /var/www/html/laravel
+            cd /var/www/html/laravel 
 
             echo "Fixing ownership so git pull works..."
             sudo chown -R ubuntu:ubuntu .
 
             echo "Pulling latest code from GitHub..."
             git pull origin main
-
 
             echo "Installing dependencies..."
             composer install --no-interaction --prefer-dist --optimize-autoloader
@@ -41,8 +40,5 @@ jobs:
             sudo chown -R www-data:www-data .
             sudo chmod -R 775 storage bootstrap/cache
 
-          
-
             echo "Deployment complete."
-
-            
+EOF
