@@ -53,5 +53,5 @@ jobs:
             sudo chmod -R 775 storage bootstrap/cache
 
             
-            echo "Deployment complete."
+            echo "Deployments complete."
           EOF
