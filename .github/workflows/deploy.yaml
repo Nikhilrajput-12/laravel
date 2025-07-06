@@ -33,13 +33,16 @@ jobs:
             echo "Pulling latest code from GitHub..."
             git pull origin main
 
-            echo "Setting correct Laravel permissions..."
-            sudo chown -R www-data:www-data .
-            sudo chmod -R 775 storage bootstrap/cache
 
             echo "Installing dependencies..."
             composer install --no-interaction --prefer-dist --optimize-autoloader
 
+            echo "Setting correct Laravel permissions..."
+            sudo chown -R www-data:www-data .
+            sudo chmod -R 775 storage bootstrap/cache
+
+          
+
             echo "Deployment complete."
-EOF
+
             
