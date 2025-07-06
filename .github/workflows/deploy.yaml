@@ -22,7 +22,7 @@ jobs:
 
       - name: Deploy to EC2 via SSH
         run: |
-          ssh -o StrictHostKeyChecking=no -i ssh-key.pem ubuntu@ 65.0.199.68  << 'EOF'
+          ssh -o StrictHostKeyChecking=no -i ssh-key.pem ubuntu@65.0.199.68  << 'EOF'
             set -e
 
             cd /var/www/html/laravel 
