@@ -19,31 +19,19 @@ jobs:
         run: |
           echo "$SSH_KEY" > ssh-key.pem
           chmod 400 ssh-key.pem
-          echo "Host *" > ~/.ssh/config
-          echo "    StrictHostKeyChecking no" >> ~/.ssh/config
 
       - name: Deploy to EC2 via SSH
-        env:
-          LARAVEL_ENV: ${{ secrets.LARAVEL_ENV }}
         run: |
-          ssh -i ssh-key.pem ubuntu@13.201.77.254 << EOF
+          ssh -o StrictHostKeyChecking=no -i ssh-key.pem ubuntu@13.201.77.254  << 'EOF'
             set -e
 
-            cd /var/www/html/laravel
+            cd /var/www/html/laravel 
 
             echo "Fixing ownership so git pull works..."
             sudo chown -R ubuntu:ubuntu .
 
             echo "Pulling latest code from GitHub..."
             git pull origin main
-
-            echo "Writing .env from secret..."
-            cat > .env <<EOL
-          $LARAVEL_ENV
-          EOL
-
-            echo "Generating Laravel APP_KEY..."
-            php artisan key:generate
 
             echo "Installing dependencies..."
             composer install --no-interaction --prefer-dist --optimize-autoloader
@@ -52,6 +40,5 @@ jobs:
             sudo chown -R www-data:www-data .
             sudo chmod -R 775 storage bootstrap/cache
 
-            
             echo "Deployment complete."
           EOF
