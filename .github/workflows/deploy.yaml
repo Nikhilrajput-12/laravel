@@ -45,7 +45,7 @@ jobs:
             echo "Generating Laravel APP_KEY..."
             php artisan key:generate
 
-            echo "Installing dependencies..."
+            echo "Installi dependencies..."
             composer install --no-interaction --prefer-dist --optimize-autoloader
 
             echo "Setting correct Laravel permissions..."
